@@ -14,7 +14,10 @@ class Keyboards {
         Markup.button.callback('📂 UploadJS', 'upload_js')
       ],
       [
-        Markup.button.callback('📜 ListWrk', 'list_workers'),
+        Markup.button.callback('🔍 AnalysisRepo', 'analyze_repo'),
+        Markup.button.callback('📜 ListWrk', 'list_workers')
+      ],
+      [
         Markup.button.callback('🗑️ DelWrk', 'delete_workers')
       ]
     ]);

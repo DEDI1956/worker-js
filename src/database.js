@@ -87,6 +87,68 @@ class Database {
       email: user.email
     };
   }
+
+  async storeTemporaryData(userId, key, data) {
+    await this.db.read();
+    if (!this.db.data.users[userId]) {
+      this.db.data.users[userId] = {};
+    }
+    
+    if (!this.db.data.users[userId].tempData) {
+      this.db.data.users[userId].tempData = {};
+    }
+    
+    this.db.data.users[userId].tempData[key] = {
+      data: data,
+      timestamp: new Date().toISOString()
+    };
+    
+    this.db.data.users[userId].lastUpdated = new Date().toISOString();
+    await this.db.write();
+  }
+
+  async getTemporaryData(userId, key) {
+    await this.db.read();
+    const user = this.db.data.users[userId];
+    
+    if (!user || !user.tempData || !user.tempData[key]) {
+      return null;
+    }
+    
+    // Check if data is older than 1 hour (3600000 ms)
+    const timestamp = new Date(user.tempData[key].timestamp);
+    const now = new Date();
+    const hourAgo = new Date(now.getTime() - 3600000);
+    
+    if (timestamp < hourAgo) {
+      // Data is too old, remove it
+      delete user.tempData[key];
+      await this.db.write();
+      return null;
+    }
+    
+    return user.tempData[key].data;
+  }
+
+  async clearTemporaryData(userId, key = null) {
+    await this.db.read();
+    const user = this.db.data.users[userId];
+    
+    if (!user || !user.tempData) {
+      return;
+    }
+    
+    if (key) {
+      // Clear specific key
+      delete user.tempData[key];
+    } else {
+      // Clear all temporary data
+      user.tempData = {};
+    }
+    
+    user.lastUpdated = new Date().toISOString();
+    await this.db.write();
+  }
 }
 
 module.exports = new Database();
