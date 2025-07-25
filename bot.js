@@ -8,6 +8,7 @@ const { handleAuthFlow, handleBackToMenu, requireAuth } = require('./src/handler
 const { handleDeployGit, handleDeployFlow } = require('./src/handlers/deploy');
 const { handleUploadJS, handleUploadFlow } = require('./src/handlers/upload');
 const { handleListWorkers, handleDeleteWorkers, handleDeleteWorker, handleConfirmDelete } = require('./src/handlers/workers');
+const { handleAnalyzeRepo, handleAnalyzeFlow, handleShowConfig, handleBackToAnalysis } = require('./src/handlers/analyze');
 
 // Validate required environment variables
 if (!config.BOT_TOKEN) {
@@ -35,6 +36,7 @@ bot.action('back_to_menu', requireAuth, handleBackToMenu);
 // Main menu actions
 bot.action('deploy_git', requireAuth, handleDeployGit);
 bot.action('upload_js', requireAuth, handleUploadJS);
+bot.action('analyze_repo', requireAuth, handleAnalyzeRepo);
 bot.action('list_workers', requireAuth, handleListWorkers);
 bot.action('delete_workers', requireAuth, handleDeleteWorkers);
 
@@ -48,6 +50,10 @@ bot.action(/^confirm_delete_(.+)$/, requireAuth, (ctx) => {
   const workerName = ctx.match[1];
   return handleConfirmDelete(ctx, workerName);
 });
+
+// Analysis handlers
+bot.action(/^show_config_(.+)$/, requireAuth, handleShowConfig);
+bot.action('back_to_analysis', requireAuth, handleBackToAnalysis);
 
 // Text message handlers for multi-step flows
 bot.on('text', async (ctx) => {
@@ -72,6 +78,12 @@ bot.on('text', async (ctx) => {
       ['awaiting_worker_name', 'awaiting_js_code'].includes(user.currentStep) &&
       user.stepData?.action === 'upload_js') {
     return handleUploadFlow(ctx);
+  }
+  
+  // Handle analyze flow
+  if (user && user.currentStep === 'awaiting_repo_analysis' &&
+      user.stepData?.action === 'analyze_repo') {
+    return handleAnalyzeFlow(ctx);
   }
   
   // Handle upload flow for text code

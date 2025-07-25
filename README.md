@@ -7,6 +7,7 @@ Bot Telegram untuk mengelola Cloudflare Workers dengan mudah. Deploy dan kelola 
 - 🔐 **Autentikasi Secure** - Login dengan API Token, Account ID, dan Zone ID Cloudflare
 - 🚀 **Deploy dari GitHub** - Clone repository dan deploy otomatis ke Cloudflare Workers
 - 📂 **Upload JavaScript** - Upload file .js atau paste kode langsung
+- 🔍 **Analisis Repository** - Analisis otomatis format Worker dan generate `wrangler.toml` optimal
 - 📜 **List Workers** - Lihat semua workers yang sudah di-deploy
 - 🗑️ **Delete Workers** - Hapus workers dengan konfirmasi
 - 💾 **Session Management** - Data login tersimpan dengan aman
@@ -83,6 +84,16 @@ npm start
 3. Upload file .js atau paste kode JavaScript
 4. Bot akan deploy ke Cloudflare
 
+#### 🔍 Analisis Repository
+1. Klik **🔍 AnalysisRepo**
+2. Masukkan URL repository GitHub
+3. Bot akan menganalisis:
+   - ✅ Cek keberadaan file `wrangler.toml`
+   - 🔍 Deteksi format Worker (modules/service-worker)
+   - 🔧 Deteksi kebutuhan Node.js compatibility
+   - 📝 Generate/update konfigurasi `wrangler.toml` optimal
+4. Lihat hasil analisis dan konfigurasi yang dihasilkan
+
 #### 📜 List Workers
 - Klik **📜 ListWrk** untuk melihat semua workers
 
@@ -99,7 +110,9 @@ cloudflare-telegram-bot/
 │   │   ├── auth.js           # Handler untuk autentikasi
 │   │   ├── deploy.js         # Handler untuk deploy GitHub
 │   │   ├── upload.js         # Handler untuk upload JS
-│   │   └── workers.js        # Handler untuk list/delete workers
+│   │   ├── workers.js        # Handler untuk list/delete workers
+│   │   ├── analyze.js        # Handler untuk analisis repository
+│   │   └── wrangler-analyzer.js # Core logic untuk analisis wrangler.toml
 │   ├── config.js             # Konfigurasi dan environment variables
 │   ├── database.js           # Database management dengan lowdb
 │   ├── cloudflare.js         # Cloudflare API service
