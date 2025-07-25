@@ -1,0 +1,40 @@
+# Example Wrangler Configuration for Cloudflare Workers
+# This file configures how your worker is deployed to Cloudflare
+
+name = "my-worker"
+main = "simple-worker.js"
+compatibility_date = "2024-12-19"
+
+# Use modules format for ES6 imports/exports
+[build.upload]
+format = "modules"
+
+# Environment variables (uncomment and modify as needed)
+# [vars]
+# API_KEY = "your-api-key"
+# ENVIRONMENT = "production"
+
+# KV Namespaces (uncomment and add your KV namespace ID)
+# [[kv_namespaces]]
+# binding = "MY_KV"
+# id = "your-kv-namespace-id"
+# preview_id = "your-preview-kv-namespace-id"
+
+# Durable Objects (uncomment if using Durable Objects)
+# [[durable_objects.bindings]]
+# name = "MY_DURABLE_OBJECT"
+# class_name = "MyDurableObject"
+
+# R2 Buckets (uncomment if using R2 storage)
+# [[r2_buckets]]
+# binding = "MY_BUCKET"
+# bucket_name = "my-bucket"
+
+# Custom domains/routes (uncomment and modify as needed)
+# [[routes]]
+# pattern = "example.com/*"
+# zone_name = "example.com"
+
+# Worker limits and settings
+# [limits]
+# cpu_ms = 50
